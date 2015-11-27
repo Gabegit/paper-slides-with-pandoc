@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Gabe Lee" />
+  <meta name="date" content="2015-11-26" />
+  <title>Publishing Papers with Pandoc</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="pandoc.css" type="text/css" />
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Publishing Papers with Pandoc</h1>
+<h2 class="author">Gabe Lee</h2>
+<h3 class="date">2015-11-26</h3>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#引言">引言</a><ul>
+<li><a href="#数学公式显示">数学公式显示</a></li>
+<li><a href="#引用与参考文献">引用与参考文献</a></li>
+<li><a href="#自定义清单">自定义清单</a><ul>
+<li><a href="#独立清单">独立清单</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#表格">表格</a><ul>
+<li><a href="#简单表格">简单表格</a></li>
+<li><a href="#多行表格">多行表格</a></li>
+<li><a href="#格框表格">格框表格</a></li>
+<li><a href="#管线表格">管线表格</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+<h1 id="引言">引言</h1>
+<p>This is a guide by Andrew Hobden <span class="citation">abc (2015)</span>. This demos a reference using the provided CSL.</p>
+<p>使用<strong>pandoc</strong> 写作学术论文，很方便，也很geeker <span class="citation">abc (2015)</span>。使用 <code>marked 2</code>实时 预览<code>markdown</code>文件。配置好了实时预览功能，解决了找不到文件的问题，而且可以预览 数学公式，这点太好了，只要保存即可实现。看看如何修改。</p>
+<p>还有几点想实现的功能：</p>
+<ul>
+<li>公式标签和引用</li>
+<li>参考文献的引用格式的自定义</li>
+<li>插入图片及其引用问题</li>
+<li>追踪修改过程</li>
+</ul>
+<h2 id="数学公式显示">数学公式显示</h2>
+<ol style="list-style-type: decimal">
+<li><p>行内公式这是一行有数学公式 <span class="math inline">\(x^2 + y = 1\)</span> 的地方，好像没有编译，问题在哪里？ 哦，我知道了，原来<code>$$</code>里面不能有空格，否则认不出公式。</p></li>
+<li><p>行间公式</p></li>
+</ol>
+<p><span class="math display">\[ x_{n=0}^{100} x^{n} = x \]</span></p>
+<p><span class="math display">\[ \frac{x+y}{x-y} = x^2 + \sqrt{y} \]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>pandoc math demos</strong> This is some math.</li>
+</ol>
+<p><span class="math display">\[
+\begin{aligned}
+x&amp;=1\label{eq:1}\\
+y&amp;=2
+\end{aligned}
+\]</span></p>
+<p>End of math. <span class="math inline">\(\eqref{eq:1}\)</span></p>
+<p>公式引用，例如，请参考公式 <span class="math inline">\(\eqref{eq:1}\)</span></p>
+<p><span class="math display">\[a^2 + b^2 = c^2\]</span></p>
+<p><span class="math display">\[v(t) = v_0 + \frac{1}{2} t^2\]</span></p>
+<p><span class="math display">\[\gamma = \frac{1}{\sqrt{1 - v^2/c^2}}\]</span></p>
+<p><span class="math display">\[\exists x \forall y (Rxy \equiv Ryx)\]</span></p>
+<p><span class="math display">\[p \wedge q \models p\]</span></p>
+<p><span class="math display">\[\Box\diamond p\equiv\diamond p\]</span></p>
+<p><span class="math display">\[\int_{0}^{1} x dx = \left[ \frac{1}{2}x^2 \right]_{0}^{1} = \frac{1}{2}\]</span></p>
+<p><span class="math display">\[e^x = \sum_{n=0}^\infty \frac{x^n}{n!} = \lim_{n\rightarrow\infty} (1+x/n)^n\]</span></p>
+<ul>
+<li>使用 <span class="math inline">\(\LaTeX\)</span> 的环境</li>
+</ul>
+<h2 id="引用与参考文献">引用与参考文献</h2>
+<p>引用资讯放在方括号中，以分号区隔。每一条引用都会有个 <code>key</code>，由 <code>@</code> 加上资料库中的 <code>引用 ID</code> 组成，并且可以选择性地包含<strong>前缀</strong>、<strong>定位</strong>以及<strong>后缀</strong>。例如，</p>
+<ul>
+<li><p><span class="citation">杨红丽 and 陈钊 (2015)</span> says blah</p></li>
+<li><p><span class="citation">杨汝岱 (2015, 30)</span> says blah.</p></li>
+<li><p><span class="citation">杨洋, 魏江, and 罗来军 (2015, 30, with suffix)</span> says blah.</p></li>
+<li><p><span class="citation">张少华 and 张天华 (2015; 2014, 30; see also 周维 2014)</span> says blah.</p></li>
+<li><p>A citation group <span class="citation">(see 张少华 and 张天华 2015, 34–35; also 周维 2014, chap. 3)</span>.</p></li>
+<li><p>Another one <span class="citation">(see 张少华 and 张天华 2015, 34–35)</span>.</p></li>
+<li><p>Citation with a suffix and locator <span class="citation">(张少华 and 张天华 2015, 33, 35–37, and nowhere else)</span>.</p></li>
+<li><p>Citation with suffix only <span class="citation">(张少华 and 张天华 2015 and nowhere else)</span>.</p></li>
+<li><p>With some markup <span class="citation">(<em>see</em> 张少华 and 张天华 2015, 32)</span>.</p></li>
+</ul>
+<h2 id="自定义清单">自定义清单</h2>
+<dl>
+<dt>术语 1</dt>
+<dd>这是术语1的定义 Definition 1。
+</dd>
+<dt>Term 2 with <em>inline markup</em></dt>
+<dd><p>Definition 2</p>
+<pre><code>{ some code, part of Definition 2 }</code></pre>
+<p>Third paragraph of definition 2.</p>
+</dd>
+</dl>
+<h3 id="独立清单">独立清单</h3>
+<ol style="list-style-type: decimal">
+<li>one</li>
+<li>two</li>
+<li>three</li>
+</ol>
+<!-- -->
+<ol style="list-style-type: decimal">
+<li>uno</li>
+<li>dos</li>
+<li>tres</li>
+</ol>
+<h1 id="表格">表格</h1>
+<h2 id="简单表格">简单表格</h2>
+<p>简单表格看起来像这样子：</p>
+<table>
+<caption>Demonstration of simple table syntax.</caption>
+<thead>
+<tr class="header">
+<th align="right">Right</th>
+<th align="left">Left</th>
+<th align="center">Center</th>
+<th align="left">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">12</td>
+<td align="left">12</td>
+<td align="center">12</td>
+<td align="left">12</td>
+</tr>
+<tr class="even">
+<td align="right">123</td>
+<td align="left">123</td>
+<td align="center">123</td>
+<td align="left">123</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="center">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="right">344</td>
+<td align="left">33</td>
+<td align="center">233</td>
+<td align="left">323</td>
+</tr>
+</tbody>
+</table>
+<p>直行的对齐则依照表头的文字和其底下虚线的相对位置来决定：</p>
+<ul>
+<li>如果虚线与表头文字的右侧有切齐，而左侧比表头文字还长，则该直行为靠右对齐。</li>
+<li>如果虚线与表头文字的左侧有切齐，而右侧比表头文字还长，则该直行为靠左对齐。</li>
+<li>如果虚线的两侧都比表头文字长，则该直行为置中对齐。</li>
+<li>如果虚线与表头文字的两侧都有切齐，则会套用预设的对齐方式（在大多数情况下， 这将会是靠左对齐）。</li>
+</ul>
+<h2 id="多行表格">多行表格</h2>
+<p>多行表格允许表头与表格资料格的文字能以复数行呈现（但不支援横跨多栏或纵跨多列的资料格）。以下为范例：</p>
+<table style="width:85%;">
+<caption>Here’s the caption. It, too, may span multiple lines.</caption>
+<colgroup>
+<col width="16%" />
+<col width="11%" />
+<col width="22%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Centered Header</th>
+<th align="left">Default Aligned</th>
+<th align="right">Right Aligned</th>
+<th align="left">Left Aligned</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">First</td>
+<td align="left">row</td>
+<td align="right">12.0</td>
+<td align="left">Example of a row that spans multiple lines.</td>
+</tr>
+<tr class="even">
+<td align="center">Second</td>
+<td align="left">row</td>
+<td align="right">5.0</td>
+<td align="left">Here’s another one. Note the blank line between rows.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="格框表格">格框表格</h2>
+<p>格框表格看起来像这样：</p>
+<table style="width:74%;">
+<caption>Sample grid table.</caption>
+<colgroup>
+<col width="22%" />
+<col width="22%" />
+<col width="29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Fruit</th>
+<th align="left">Price</th>
+<th align="left">Advantages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><p>Bananas</p></td>
+<td align="left"><p>$1.34</p></td>
+<td align="left"><ul>
+<li>built-in wrapper</li>
+<li>bright color</li>
+</ul></td>
+</tr>
+<tr class="even">
+<td align="left"><p>Oranges</p></td>
+<td align="left"><p>$2.10</p></td>
+<td align="left"><ul>
+<li>cures scurvy</li>
+<li>tasty</li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+<p>以 = 串成的一行区分了表头与表格本体，这在没有表头的表格中也是可以省略的。在格框表格中的资料格可以包含任意的区块元素（复数段落、代码区块、清单等等）。不支援对齐，也不支援横跨多栏或纵跨多列的资料格。格框表格可以在 Emacs table mode 下轻松建立</p>
+<h2 id="管线表格">管线表格</h2>
+<p>管线表格看起来像这样：</p>
+<table>
+<caption>Demonstration of simple table syntax.</caption>
+<thead>
+<tr class="header">
+<th align="right">Right</th>
+<th align="left">Left</th>
+<th align="left">Default</th>
+<th align="center">Center</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">12</td>
+<td align="left">12</td>
+<td align="left">12</td>
+<td align="center">12</td>
+</tr>
+<tr class="even">
+<td align="right">123</td>
+<td align="left">123</td>
+<td align="left">123</td>
+<td align="center">123</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p>这个语法与 PHP markdown extra 中的表格语法相同。开始与结尾的管线字元是可选的，但各直行间则必须以管线区隔。上面范例中的冒号表明了对齐方式。表头可以省略，但表头下的水平虚线必须保留，因为虚线上定义了资料栏的对齐方式。</p>
+<p>注意：Pandoc 也可以看得懂以下形式的管线表格，这是由 Emacs 的 orgtbl-mod 所绘制：</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">One</th>
+<th align="left">Two</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">my</td>
+<td align="left">table</td>
+</tr>
+<tr class="even">
+<td align="left">is</td>
+<td align="left">nice</td>
+</tr>
+</tbody>
+</table>
+<p>主要的差别在于以 + 取代了部分的 |。其他的 orgtbl 功能并未支援。如果要指定非预 设的直行对齐形式，你仍然需要在上面的表格中自行加入冒号。</p>
+<p>再来一个试试，使用 orgtbl的命令： <code>orgtbl-mode</code> <code>C-c |</code></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="left">性别</th>
+<th align="left">年龄</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">张三</td>
+<td align="left">男</td>
+<td align="left">23</td>
+</tr>
+<tr class="even">
+<td align="left">李四</td>
+<td align="left">男</td>
+<td align="left">33</td>
+</tr>
+<tr class="odd">
+<td align="left">王二</td>
+<td align="left">男</td>
+<td align="left">34</td>
+</tr>
+<tr class="even">
+<td align="left">宫二</td>
+<td align="left">女</td>
+<td align="left">18</td>
+</tr>
+</tbody>
+</table>
+<h1 id="references" class="unnumbered">References</h1>
+<div id="refs" class="references">
+<div id="ref-abc:2015">
+<p>abc. 2015. “This Abc Title.” <em>The Abc Journal</em> 1.</p>
+</div>
+<div id="ref-zhouwei2014">
+<p>周维. 2014. “工业企业创新租金分享程度研究.” <em>经济研究参考</em>, no. 21: 76–91. <a href="http://www.cqvip.com/qk/80343x/201421/49429227.html" class="uri">http://www.cqvip.com/qk/80343x/201421/49429227.html</a>.</p>
+</div>
+<div id="ref-zhangshaohua2015">
+<p>张少华, and 张天华. 2015. “中国工业企业动态演化效率研究: 所有制视角.” <em>数量经济技术经济研究</em> 3: 002. <a href="http://www.cnki.com.cn/Article/CJFDTotal-SLJY201503002.htm" class="uri">http://www.cnki.com.cn/Article/CJFDTotal-SLJY201503002.htm</a>.</p>
+</div>
+<div id="ref-yangrudai2015">
+<p>杨汝岱. 2015. “中国制造业企业全要素生产率研究.” <em>经济研究</em> 50 (2): 61–74. <a href="http://www.flcds.fudan.edu.cn/userfiles/20150323/20150323093700.pdf" class="uri">http://www.flcds.fudan.edu.cn/userfiles/20150323/20150323093700.pdf</a>.</p>
+</div>
+<div id="ref-yangyang2015">
+<p>杨洋, 魏江, and 罗来军. 2015. “谁在利用政府补贴进行创新?——所有制和要素市场扭曲的联合调节效应.” <em>管理世界</em>, no. 1: 75–86. <a href="http://www.cqvip.com/qk/95499x/201501/663279788.html" class="uri">http://www.cqvip.com/qk/95499x/201501/663279788.html</a>.</p>
+</div>
+<div id="ref-yanghongli2015">
+<p>杨红丽, and 陈钊. 2015. “外商直接投资水平溢出的间接机制: 基于上游供应商的研究.” <em>世界经济</em>, no. 3: 123–44. <a href="http://www.cqvip.com/qk/92713x/201503/664193681.html" class="uri">http://www.cqvip.com/qk/92713x/201503/664193681.html</a>.</p>
+</div>
+<div id="ref-zhaojunzhu2014">
+<p>赵浚竹, 孙铁山, and 李国平. 2014. “中国汽车制造业集聚与企业区位选择.” <em>地理学报</em> 69 (6): 850–62. <a href="http://www.cnki.com.cn/Article/CJFDTotal-DLXB201406011.htm" class="uri">http://www.cnki.com.cn/Article/CJFDTotal-DLXB201406011.htm</a>.</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+---
+title: "Untitled"
+author: "lgm"
+date: "2015年11月27日"
+output: word_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+# 写作与Markdown
+
+使用pandoc 写作学术论文，很方便，也很geeker abc (2015)。使用 marked 2实时预览markdown文件。配置好了实时预览功能，解决了找不到文件的问题，而且可以预览 数学公式，这点太好了，只要保存即可实现。看看如何修改。
+
+## 写作会碰到什么难题？
+
+
+还有几点想实现的功能：
+•	公式标签和引用
+•	参考文献的引用格式的自定义
+•	插入图片及其引用问题
+•	追踪修改过程
+写作一般而言，会碰到这么一些难题：
+
+难以专心：写Word文档的时候，我们经常浪费大量时间在Word本身上，特别是那80%我们用不到的功能。比如，找借口，Word又出问题了；或者，又要升级了。其实，在内心偷笑，哈哈，可以偷懒了
+
+浪费力气在排版上：使用Word时，我们会花费大量力气去排版，试图让文档变得漂亮一些。是粗体还是斜体，是宋体还是黑体，对创作来说，有那么重要吗？
+
+`<br >
+```{r message=FALSE}
+library(dplyr)
+# extract a subset of the mtcars data
+df <- mtcars %>%
+    mutate(make_model = row.names(mtcars)) %>%
+    filter(cyl == 4) %>%    
+    select(make_model, mpg, wt) %>%
+    mutate(wt = wt*1000) %>%
+    arrange(make_model) 
+```
+
+Then use *knitr::kable()* to create the table.
+
+```{r, echo=FALSE}
+library(knitr)
+kable(df) 
+```
+<br >
